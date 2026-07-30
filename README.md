@@ -50,10 +50,7 @@ NOTION_ROOT_PAGE_URL=
 
 ## 3. Notion 템플릿 복제
 
-> 저장소 배포자 확인: 공개 전 아래 링크의 `{{NOTION_TEMPLATE_URL}}`을 실제
-> Notion 공개 복제 링크로 교체해야 해요.
-
-[Notion 뉴스 수집 대시보드 복제하기]({{https://app.notion.com/p/PEAKON-3acaafd5210e8088a695ce265980526b?source=copy_link}})
+[PEAKON](https://app.notion.com/p/PEAKON-3acaafd5210e8088a695ce265980526b?source=copy_link)
 
 1. 링크를 열고 Notion에 로그인해요.
 2. 오른쪽 위의 `•••`를 눌러요.
