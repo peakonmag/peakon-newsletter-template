@@ -1,0 +1,78 @@
+name: 2. 뉴스 수집
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "7 8 * * *"
+      timezone: "Asia/Seoul"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: naver-news-notion-collection
+  cancel-in-progress: false
+
+jobs:
+  collect-news:
+    name: 설정 검사 후 뉴스 수집
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_ROOT_PAGE_URL: ${{ secrets.NOTION_ROOT_PAGE_URL }}
+
+    steps:
+      - name: 저장소 파일 준비
+        uses: actions/checkout@v4
+
+      - name: Python 준비
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 필요한 패키지 설치
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: 수집 전 설정 검사
+        id: setup
+        shell: bash
+        run: |
+          python scripts/validate_setup.py > setup-check.log 2>&1
+          cat setup-check.log
+
+      - name: 새 뉴스 수집
+        id: collect
+        shell: bash
+        run: |
+          python main.py > collection.log 2>&1
+          cat collection.log
+
+      - name: 실행 결과 요약
+        if: always()
+        shell: bash
+        env:
+          SETUP_OUTCOME: ${{ steps.setup.outcome }}
+          COLLECTION_OUTCOME: ${{ steps.collect.outcome }}
+        run: |
+          {
+            if [ "$SETUP_OUTCOME" != "success" ]; then
+              echo "## ❌ 뉴스 수집 전 설정 검사 실패"
+              echo
+              echo "뉴스 수집은 실행하지 않았습니다. Setup Check를 실행해 설정을 확인해 주세요."
+            elif [ "$COLLECTION_OUTCOME" = "success" ]; then
+              echo "## ✅ 뉴스 수집 완료"
+              echo
+              echo "조건에 맞는 새 기사를 Notion 뉴스 아카이브에 저장했습니다."
+            else
+              echo "## ❌ 뉴스 수집 실패"
+              echo
+              echo "설정 검사는 통과했지만 수집 중 문제가 발생했습니다. 실패한 단계의 로그를 확인해 주세요."
+            fi
+            echo
+            echo "- 실행 방식: ${{ github.event_name == 'schedule' && '매일 예약 실행' || '버튼 실행' }}"
+            echo "- 예약 시간: 매일 오전 8시 7분 (Asia/Seoul)"
+          } >> "$GITHUB_STEP_SUMMARY"

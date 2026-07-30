@@ -1,0 +1,63 @@
+name: 1. 설정 연결 검사
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-setup:
+    name: Notion과 네이버 연결 검사
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      NAVER_CLIENT_ID: ${{ secrets.NAVER_CLIENT_ID }}
+      NAVER_CLIENT_SECRET: ${{ secrets.NAVER_CLIENT_SECRET }}
+      NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+      NOTION_ROOT_PAGE_URL: ${{ secrets.NOTION_ROOT_PAGE_URL }}
+
+    steps:
+      - name: 저장소 파일 준비
+        uses: actions/checkout@v4
+
+      - name: Python 준비
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: 필요한 패키지 설치
+        run: python -m pip install --disable-pip-version-check -r requirements.txt
+
+      - name: 설정 검사 및 결과 요약
+        shell: bash
+        run: |
+          set +e
+          python scripts/validate_setup.py > setup-check.log 2>&1
+          check_status=$?
+          set -e
+
+          cat setup-check.log
+
+          {
+            if [ "$check_status" -eq 0 ]; then
+              echo "## ✅ 설정 연결 검사 성공"
+              echo
+              echo "네이버 뉴스 API와 Notion 연결을 사용할 준비가 되었습니다."
+            else
+              echo "## ❌ 설정 연결 검사 실패"
+              echo
+              echo "아래 검사 결과를 읽고 표시된 설정을 수정한 뒤 다시 실행해 주세요."
+            fi
+            echo
+            echo "<details>"
+            echo "<summary>검사 내용 자세히 보기</summary>"
+            echo
+            echo '```text'
+            cat setup-check.log
+            echo '```'
+            echo "</details>"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          exit "$check_status"

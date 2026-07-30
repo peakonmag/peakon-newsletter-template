@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.DS_Store
+.pytest_cache/
+*.log
+# 이전 버전의 로컬 기록 파일은 더 이상 읽지 않지만 커밋하지 않습니다.
+sent_articles.json
+sent_articles.broken-*.json
