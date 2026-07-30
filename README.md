@@ -53,10 +53,10 @@ NOTION_ROOT_PAGE_URL=
 [PEAKON](https://citrine-packet-96f.notion.site/PEAKON-3acaafd5210e8088a695ce265980526b?source=copy_link)
 
 1. 링크를 열고 Notion에 로그인해요.
-2. 오른쪽 위의 `•••`를 눌러요.
-3. '복제' 혹은 'Duplicate'를 눌러요.
-4. 복제된 페이지를 열어요.
-5. `공유`에서 이 페이지의 링크를 복사해 둬요. 이 값이 나중에
+2. '복제' 혹은 'Duplicate'를 눌러요.
+3. 워크스페이스를 지정하세요.
+3. 복제된 페이지를 열어요.
+4. `공유`에서 이 페이지의 링크를 복사해 둬요. 이 값이 나중에
    `NOTION_ROOT_PAGE_URL`이 돼요.
 
 복제 후 `키워드 설정`, `뉴스 아카이브`의 이름이나 속성명을 바꾸지 마세요.
@@ -69,7 +69,7 @@ NOTION_ROOT_PAGE_URL=
 2. 이름은 알아보기 쉽게 `newsletter`처럼 입력해요.
 3. 템플릿을 복제한 워크스페이스를 선택해요.
 4. 콘텐츠 읽기, 콘텐츠 추가, 콘텐츠 업데이트 권한을 허용해요.
-5. 생성된 내부 Integration Token을 복사해 안전한 곳에 잠시 보관해요.
+5. 생성된 내부 Integration Token을 복사해 메모장에 잠시 보관해요.
    이 값이 `NOTION_TOKEN`이에요.
 
 토큰은 비밀번호와 같아요. 메모를 공개 공유하거나 GitHub 파일에 붙여 넣지
@@ -79,22 +79,22 @@ NOTION_ROOT_PAGE_URL=
 
 1. 복제한 부모 대시보드 페이지를 열어요.
 2. 오른쪽 위 `•••` 메뉴를 눌러요.
-3. `연결 추가` 또는 `Add connections`를 선택해요.
-4. 앞에서 만든 `네이버 뉴스 수집기` Integration을 선택해요.
-5. 부모 페이지와 하위 페이지에 접근한다는 안내를 확인하고 연결해요.
+3. '연결'을 선택해요.
+4. '연결 추가하기'를 선택해요.
+5. '연결 관리'로 이동해요.
+6. '관리' 탭에서 '모든 연결'을 선택해요.
+7. 앞에서 만든 `newsletter` Integration 이름의 `•••` 메뉴를 눌러요.
+8. Content access에 'PEAKON 피콘 뉴스레터 템플릿' 페이지를 추가해요.
 
 반드시 `키워드 설정`과 `뉴스 아카이브`를 모두 포함하는 부모 페이지에서
 연결해야 해요.
 
 ## 6. GitHub 템플릿 복제
 
-1. 이 GitHub 저장소 위쪽의 `Use this template`을 눌러요.
+1. 위 링크의 GitHub 저장소 위쪽의 `Use this template`을 눌러요.
 2. `Create a new repository`를 선택해요.
-3. 저장소 이름을 정해요.
+3. 저장소 이름을 영어로 적어요.
 4. 공개 범위를 선택하고 `Create repository`를 눌러요.
-
-`Fork` 버튼이 아니라 `Use this template`을 사용하세요. 파일을 내려받거나
-Git 명령어를 실행할 필요가 없어요.
 
 ## 7. Repository Secrets 네 개 등록
 
